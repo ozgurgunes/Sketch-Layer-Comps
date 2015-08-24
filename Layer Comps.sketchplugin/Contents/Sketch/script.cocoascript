@@ -1,0 +1,191 @@
+@import 'lib.js'
+
+// Handler function for "New Layer Comp"
+var newLayerComp = function(context) {
+    var command = context.command;        // The current command (MSPluginCommand)
+    var doc = context.document;           // the current document (MSDocument)
+    var page = [doc currentPage];         // the current page (MSPage)
+
+    var layers = getLayers(page)
+    var comps = getComps(layers, command)||['']
+
+    var currentComp = [command valueForKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
+    comps.sort()
+    comps.splice(comps.indexOf(defaultCompName),1)
+    comps.unshift(defaultCompName)
+    var index = 0
+    comps.forEach(function(data, i){
+        if (data == currentComp) {
+            index = i
+        }
+    })
+
+    var compName = createCombobox("Layer Comp Name", "Please give a name to Layer Comp", comps, index);
+    if (compName.length() > 0) {
+        for(var i=0; i<comps.length; i++){
+            if (comps[i] == compName){
+                response = createDialog('Are you sure?', 'This will update "'+compName+'" comp.');            
+                if (response) {
+                    setComp(compName, layers, command)
+                    return [doc showMessage: "Layer Comp updated: " + compName]
+                }
+            }
+        }
+        setComp(compName, layers, command)
+        [doc showMessage: "New Layer Comp: " + compName]
+    }
+};
+
+// Handler function for "Apply Layer Comp"
+var applyLayerComp = function(context) {
+    var command = context.command;        // The current command (MSPluginCommand)
+    var doc = context.document;           // the current document (MSDocument)
+    var page = [doc currentPage];         // the current page (MSPage)
+
+    var layers = getLayers(page)
+    var comps = getComps(layers, command)||['']
+
+    var currentComp = [command valueForKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
+    comps.sort()
+    comps.splice(comps.indexOf(defaultCompName),1)
+    comps.unshift(defaultCompName)
+    var index = 0
+    comps.forEach(function(data, i){
+        if (data == currentComp) {
+            index = i
+        }
+    })
+
+    var compName = createSelect("Apply Layer Comp", "Please select layer comp to be activated.", comps, index);
+    if (compName != null && compName.length() > 0) {
+        setDefault(currentComp, compName, layers, command)
+        applyComp(currentComp, compName, layers, command)
+        [command setValue:compName forKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
+        [doc showMessage: "Current Layer Comp: " + compName]
+    }
+};
+
+// Handler function for "Delete Layer Comps"
+var deleteLayerComps = function(context) {
+    var doc = context.document;           // the current document (MSDocument)
+    var page = [doc currentPage];         // the current page (MSPage)
+    var layers = [page children];         // A flattened array (NSArray) of all layers in `page`
+    var selection = context.selection;    // An NSArray of MSLayers
+    var command = context.command;        // The current command (MSPluginCommand)
+    var layers = getLayers(page)
+    var comps = getComps(layers, command)
+    
+    var result = createList("Delete Layer Comps", "Please select Layer Comps to be deleted.", comps);
+    if (result) {
+        result.forEach(function(compName, i){
+            deleteComps(compName, layers, command)
+        })
+        [app displayDialog: result.length + " layer comps deleted"];
+    }
+};
+
+// Utility functions
+function getLayers(page) {
+    var predicate = NSPredicate.predicateWithFormat(
+            "(class == %@ && parentOrSelfIsSymbol == %@)||isSymbol==%@",
+            MSLayerGroup, false, true)
+    var layers = page.children().filteredArrayUsingPredicate(predicate)
+    return layers
+}
+
+function getComps(layers, command){
+    var comps = [];
+    var loop = layers.objectEnumerator();
+    while (layer = loop.nextObject()){
+        var dict = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};        
+        for(var key in dict){
+            if (comps.indexOf(key)<0){
+                comps.push(key);
+            }
+        }
+    }
+    return comps;
+}
+
+function getCurrentCompIndex(){
+    
+}
+
+function setDefault(currentComp, compName, layers, command){
+    log(currentComp)
+    var loop = layers.objectEnumerator()
+    var changed = false
+    while (layer = loop.nextObject()){
+        var comps = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};
+        var dict = {}
+        for (var key in comps){
+            dict[key] = comps[key];
+        }
+        var coordinates = {};
+        coordinates['x'] = layer.frame().x()
+        coordinates['y'] = layer.frame().y()
+        
+        if (
+            (!dict[currentComp] && layer.isVisible()) ||
+            (dict[currentComp] && (dict[currentComp]['x']!=coordinates['x']||dict[currentComp]['y']!=coordinates['y'])) ||
+            (dict[currentComp] && !layer.isVisible())
+        ) {
+            changed = true
+        }
+
+    }
+    if (changed) {
+        setComp(defaultCompName, layers, command)
+    }    
+}
+
+function setComp(compName, layers, command){
+    var loop = layers.objectEnumerator()
+    while (layer = loop.nextObject()){
+        var coordinates = {'x':layer.frame().x(), 'y':layer.frame().y()};
+        var comps = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};
+        var dict = {}
+        for (var key in comps){
+            dict[key] = comps[key];
+        }
+        if (dict[compName]) {
+            delete dict[compName];
+        }
+        if (layer.isVisible()) {
+            dict[compName] = coordinates;
+        }
+        [command setValue:dict forKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier];
+    }    
+}
+
+function applyComp(currentComp, compName, layers, command){
+    var loop = layers.objectEnumerator()
+    var changed = false
+    while (layer = loop.nextObject()){
+        var comps = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};
+        var dict = {}
+        for (var key in comps){
+            dict[key] = comps[key];
+        }
+        layer.setIsVisible(comps.objectForKey(compName)!=nil)
+        if (comps.objectForKey(compName)!=nil) {
+        layer.frame().setX(comps.objectForKey(compName)['x'])
+        layer.frame().setY(comps.objectForKey(compName)['y'])
+        }
+    }   
+}
+
+function deleteComps(compName, layers, command){
+    var loop = layers.objectEnumerator()
+    while (layer = loop.nextObject()){
+        var comps = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};
+        var dict = {}
+        for (var key in comps){
+            dict[key] = comps[key];
+        }
+        if (dict[compName]) {
+            delete dict[compName];
+        }
+        [command setValue:dict forKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier];
+    }    
+}
