@@ -21,13 +21,14 @@ function createCombobox(msg, info, items, selectedItemIndex){
     items.splice(items.indexOf(defaultCompName),1)
     items.sort().unshift('')
     selectedItemIndex = selectedItemIndex || 0
+    var buttons = ['Save', 'Cancel']
     var accessory = [[NSComboBox alloc] initWithFrame:NSMakeRect(0,0,240,25)]
     [accessory addItemsWithObjectValues: items]
     [accessory selectItemAtIndex: selectedItemIndex]
     [accessory setEditable: true]
     [accessory setCompletes: true]
     
-    var response = createDialog(msg, info, accessory)
+    var response = createDialog(msg, info, accessory, buttons)
     //var selected = [accessory indexOfSelectedItem]
     var result = [accessory stringValue]
     if (response === 1000) {
@@ -41,6 +42,7 @@ function createCombobox(msg, info, items, selectedItemIndex){
 }
 
 function createSelect (msg, info, items, selectedItemIndex){
+    var buttons = ['Apply', 'Cancel']
     if (items.length < 1) {
         return [app displayDialog: "No layer comps" ];
     }
@@ -49,7 +51,7 @@ function createSelect (msg, info, items, selectedItemIndex){
     [accessory addItemsWithTitles: items]
     [accessory selectItemAtIndex: selectedItemIndex]
 
-    var response = createDialog(msg, info, accessory)
+    var response = createDialog(msg, info, accessory, buttons)
     var result = [accessory titleOfSelectedItem]
     if (response === 1000) {
         return result
@@ -61,7 +63,7 @@ function createList(msg, info, items, selectedItemIndex) {
     items.sort()
     items.splice(items.indexOf(defaultCompName),1)
     selectedItemIndex = selectedItemIndex || 0
-    var buttons = ['OK', 'Cancel', 'Delete All']
+    var buttons = ['Delete', 'Cancel', 'Delete All']
  
     var accessory = [[NSView alloc] initWithFrame:NSMakeRect(0,0,240,120)]
     var scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(0,0,240,120)]

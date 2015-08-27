@@ -24,7 +24,7 @@
         {
             "script" : "script.cocoascript",
             "handler" : "applyLayerComp",
-            "shortcut" : "cmd ctrl s",
+            "shortcut" : "cmd ctrl a",
             "name" : "Aply Layer Comp",
             "identifier" : "applyLayerComp"
         }

@@ -21,18 +21,20 @@ var newLayerComp = function(context) {
     })
 
     var compName = createCombobox("Layer Comp Name", "Please give a name to Layer Comp", comps, index);
+    var message = "New Layer Comp: " + compName
     if (compName.length() > 0) {
         for(var i=0; i<comps.length; i++){
             if (comps[i] == compName){
                 response = createDialog('Are you sure?', 'This will update "'+compName+'" comp.');            
-                if (response) {
-                    setComp(compName, layers, command)
-                    return [doc showMessage: "Layer Comp updated: " + compName]
+                if (response!=1000) {
+                    return false;
                 }
+                message = "Layer Comp updated: " + compName
             }
         }
         setComp(compName, layers, command)
-        [doc showMessage: "New Layer Comp: " + compName]
+        [command setValue:compName forKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
+        [doc showMessage: message]
     }
 };
 
@@ -107,10 +109,6 @@ function getComps(layers, command){
     return comps;
 }
 
-function getCurrentCompIndex(){
-    
-}
-
 function setDefault(currentComp, compName, layers, command){
     log(currentComp)
     var loop = layers.objectEnumerator()
@@ -160,7 +158,6 @@ function setComp(compName, layers, command){
 
 function applyComp(currentComp, compName, layers, command){
     var loop = layers.objectEnumerator()
-    var changed = false
     while (layer = loop.nextObject()){
         var comps = [command valueForKey:pluginKey onLayer:layer forPluginIdentifier:pluginIdentifier]||{};
         var dict = {}
@@ -169,8 +166,8 @@ function applyComp(currentComp, compName, layers, command){
         }
         layer.setIsVisible(comps.objectForKey(compName)!=nil)
         if (comps.objectForKey(compName)!=nil) {
-        layer.frame().setX(comps.objectForKey(compName)['x'])
-        layer.frame().setY(comps.objectForKey(compName)['y'])
+            layer.frame().setX(comps.objectForKey(compName)['x'])
+            layer.frame().setY(comps.objectForKey(compName)['y'])
         }
     }   
 }
