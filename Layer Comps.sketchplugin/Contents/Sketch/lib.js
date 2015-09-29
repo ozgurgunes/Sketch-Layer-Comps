@@ -18,8 +18,6 @@ function createDialog(message, info, accessory, buttons){
 }
 
 function createCombobox(msg, info, items, selectedItemIndex){
-    items.splice(items.indexOf(defaultCompName),1)
-    items.sort().unshift('')
     selectedItemIndex = selectedItemIndex || 0
     var buttons = ['Save', 'Cancel']
     var accessory = [[NSComboBox alloc] initWithFrame:NSMakeRect(0,0,240,25)]
@@ -29,7 +27,6 @@ function createCombobox(msg, info, items, selectedItemIndex){
     [accessory setCompletes: true]
     
     var response = createDialog(msg, info, accessory, buttons)
-    //var selected = [accessory indexOfSelectedItem]
     var result = [accessory stringValue]
     if (response === 1000) {
         if (!result.length()>0) {

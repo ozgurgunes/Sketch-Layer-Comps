@@ -11,8 +11,10 @@ var newLayerComp = function(context) {
 
     var currentComp = [command valueForKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
     comps.sort()
-    comps.splice(comps.indexOf(defaultCompName),1)
-    comps.unshift(defaultCompName)
+    if (comps.indexOf(defaultCompName)>=0) {
+        comps.splice(comps.indexOf(defaultCompName),1)    
+    }
+    comps.unshift('')
     var index = 0
     comps.forEach(function(data, i){
         if (data == currentComp) {
@@ -32,7 +34,7 @@ var newLayerComp = function(context) {
                 message = "Layer Comp updated: " + compName
             }
         }
-        setComp(compName, layers, command)
+        setComp(compName.toString(), layers, command)
         [command setValue:compName forKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
         [doc showMessage: message]
     }
@@ -49,7 +51,9 @@ var applyLayerComp = function(context) {
 
     var currentComp = [command valueForKey:pluginKey onLayer:page forPluginIdentifier:pluginIdentifier];
     comps.sort()
-    comps.splice(comps.indexOf(defaultCompName),1)
+    if (comps.indexOf(defaultCompName)>=0) {
+        comps.splice(comps.indexOf(defaultCompName),1)    
+    }
     comps.unshift(defaultCompName)
     var index = 0
     comps.forEach(function(data, i){
@@ -110,7 +114,6 @@ function getComps(layers, command){
 }
 
 function setDefault(currentComp, compName, layers, command){
-    log(currentComp)
     var loop = layers.objectEnumerator()
     var changed = false
     while (layer = loop.nextObject()){
