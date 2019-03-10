@@ -1,0 +1,37 @@
+{
+  "name": "Layer Comps",
+  "description" : "A Sketch plugin which saves and applies layer states to create different compositions of current artboard.",
+  "identifier" : "com.gunesozgur.sketch.layer-comps",
+  "author": "Özgür Güneş",
+  "authorEmail": "o.gunes@gmail.com",
+  "homepage": "https://github.com/ozgurgunes/Sketch-Layer-Comps",
+  "appcast": "https://raw.githubusercontent.com/ozgurgunes/Sketch-Layer-Comps/master/.appcast.xml",
+  "compatibleVersion": 49,
+  "bundleVersion": 1,
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "Save Layer Comp",
+      "identifier": "layer-comps.save-comp",
+      "script": "./save-comp.js"
+    },
+    {
+      "name": "Set Layer Comp",
+      "identifier": "layer-comps.set-comp",
+      "script": "./set-comp.js"
+    },
+    {
+      "name": "Delete Layer Comps",
+      "identifier": "layer-comps.delete-comps",
+      "script": "./delete-comps.js"
+    }
+  ],
+  "menu": {
+    "title": "Layer Comps",
+    "items": [
+      "layer-comps.save-comp",
+      "layer-comps.set-comp",
+      "layer-comps.delete-comps"
+    ]
+  }
+}

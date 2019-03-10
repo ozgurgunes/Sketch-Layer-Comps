@@ -1,0 +1,39 @@
+{
+  "name": "layer-comps",
+  "description": "A Sketch plugin which saves and applies layer states to create different compositions of current artboard.",
+  "author": "Özgür Güneş",
+  "authorEmail": "o.gunes@gmail.com",
+  "homepage": "https://github.com/ozgurgunes/Sketch-Layer-Comps",
+  "license": "MIT",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ozgurgunes/Sketch-Layer-Comps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ozgurgunes/Sketch-Layer-Comps/issues"
+  },
+  "engines": {
+    "sketch": ">=49"
+  },
+  "skpm": {
+    "name": "Layer Comps",
+    "manifest": "src/manifest.json",
+    "main": "layer-comps.sketchplugin",
+    "assets": [
+      "assets/**/*"
+    ]
+  },
+  "scripts": {
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
+    "postinstall": "npm run build && skpm-link"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.11"
+  },
+  "dependencies": {
+    "sketch-module-google-analytics": "^0.1.4"
+  }
+}
