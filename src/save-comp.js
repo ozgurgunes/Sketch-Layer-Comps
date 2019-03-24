@@ -7,24 +7,24 @@ import {
   analytics
 } from './utils.js'
 
-var doc = sketch.getSelectedDocument(),
-  selection = doc.selectedLayers
+var doc = sketch.getSelectedDocument()
+var selection = doc.selectedLayers
 
 const saveComp = context => {
   try {
-    let artboard = getArtboard(selection),
-      comps = getComps(artboard),
-      compName = saveCompDialog(comps.map(comp => comp.name))
+    let artboard = getArtboard(selection)
+    let comps = getComps(artboard)
+    let compName = saveCompDialog(comps.map(comp => comp.name))
     if (compName) {
       if (comps.some(comp => comp.name == compName)) {
-        var response = updateCompDialog(compName);
+        var response = updateCompDialog(compName)
         if (response != 1000) {
-          return saveComp(context);
+          return saveComp(context)
         }
         let i = comps.findIndex(comp => comp.name == compName)
         comps[i].layers = getArtboardLayers(artboard)
-        analytics("Update", true)
-        return UI.success(compName + " updated.")
+        analytics('Update', true)
+        return UI.success(compName + ' updated.')
       } else {
         comps.push({
           name: compName,
@@ -32,8 +32,8 @@ const saveComp = context => {
         })
         settings.setLayerSettingForKey(artboard,
           context.plugin.identifier(), comps)
-        analytics("Save", true)
-        return UI.success(compName + " saved.")
+        analytics('Save', true)
+        return UI.success(compName + ' saved.')
       }
     }
   } catch (e) {
@@ -45,7 +45,7 @@ const saveComp = context => {
 export default saveComp
 
 const getArtboardLayers = artboard => {
-  let comp, layers = []
+  let comp; let layers = []
   artboard.layers.map(layer => {
     comp = {
       id: layer.id,
@@ -60,11 +60,11 @@ const getArtboardLayers = artboard => {
 }
 
 const saveCompDialog = items => {
-  let buttons = ['Save', 'Cancel'],
-    info = "Please give a name to layer comp.",
-    accessory = UI.comboBox(items),
-    response = UI.dialog(info, accessory, buttons),
-    result = accessory.stringValue()
+  let buttons = ['Save', 'Cancel']
+  let info = 'Please give a name to layer comp.'
+  let accessory = UI.comboBox(items)
+  let response = UI.dialog(info, accessory, buttons)
+  let result = accessory.stringValue()
   if (response === 1000) {
     if (!result.length() > 0) {
       return saveCompDialog(items)
@@ -74,8 +74,8 @@ const saveCompDialog = items => {
 }
 
 const updateCompDialog = compName => {
-  let buttons = ['Update', 'Cancel'],
-    message = "Are you sure?",
-    info = 'This will update "' + compName + '" comp.'
+  let buttons = ['Update', 'Cancel']
+  let message = 'Are you sure?'
+  let info = 'This will update "' + compName + '" comp.'
   return UI.dialog(info, null, buttons, message)
 }
