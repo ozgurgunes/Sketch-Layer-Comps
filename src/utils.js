@@ -1,7 +1,7 @@
 import sketch from 'sketch/dom'
 import settings from 'sketch/settings'
-import send from 'sketch-module-google-analytics'
-import * as UI from './ui.js'
+import analytics from './analytics'
+import * as UI from './ui'
 
 export const getArtboard = selection => {
   let artboard
@@ -29,18 +29,4 @@ export const getComps = (artboard, error) => {
     throw UI.dialog('There are not any layer comps.')
   }
   return comps.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase())
-}
-
-export const analytics = (label, value) => {
-  const ID = 'UA-5738625-2'
-  const payload = {}
-  payload.ec = context.plugin.name()
-  payload.ea = context.command.name()
-  if (label) {
-    payload.el = label
-  }
-  if (value) {
-    payload.ev = value
-  }
-  return send(context, ID, 'event', payload)
 }

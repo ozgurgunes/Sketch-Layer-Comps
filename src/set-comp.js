@@ -1,10 +1,10 @@
 import sketch from 'sketch/dom'
-import * as UI from './ui.js'
+import analytics from './analytics'
+import * as UI from './ui'
 import {
   getArtboard,
-  getComps,
-  analytics
-} from './utils.js'
+  getComps
+} from './utils'
 
 var doc = sketch.getSelectedDocument()
 var selection = doc.selectedLayers
