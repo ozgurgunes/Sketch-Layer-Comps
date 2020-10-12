@@ -1,4 +1,4 @@
-<img src="https://github.com/ozgurgunes/Sketch-Layer-Comps/blob/master/assets/icon.png?raw=true" alt="Sketch Case Converter" width="128" align="right" />
+<img src="https://github.com/ozgurgunes/Sketch-Layer-Comps/blob/master/assets/icon.png?raw=true" alt="Sketch Case Converter" width="192" align="right" />
 
 # Layer Comps  [![Download Latest][image]][link]
 

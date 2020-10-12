@@ -1,21 +1,18 @@
 import sketch from 'sketch/dom'
 import analytics from './analytics'
 import * as UI from './ui'
-import {
-  getArtboard,
-  getComps
-} from './utils'
+import { getArtboard, getComps } from './utils'
 
 var doc = sketch.getSelectedDocument()
 var selection = doc.selectedLayers
 
-export default context => {
+export default function(context) {
   try {
     let artboard = getArtboard(selection)
     let comps = getComps(artboard, true)
     comps.unshift({ name: '- Select a layer Comp -', layers: [] })
     let result = setCompDialog(comps.map(comp => comp.name))
-    if (result && (comps[result.index])) {
+    if (result && comps[result.index]) {
       if (result.index < 1) {
         analytics('Select None')
         return UI.error('No layer comp selected.')
@@ -41,7 +38,7 @@ export default context => {
   }
 }
 
-var setCompDialog = items => {
+function setCompDialog(items) {
   let buttons = ['Set', 'Cancel']
   let info = 'Please select a layer comp.'
   let accessory = UI.popUpButton(items)

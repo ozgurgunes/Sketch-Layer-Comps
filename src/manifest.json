@@ -2,12 +2,11 @@
   "name": "Layer Comps",
   "description" : "A Sketch plugin which saves and applies layer states to create different compositions of selected artboard.",
   "identifier" : "com.gunesozgur.sketch.layer-comps",
-  "author": "Özgür Güneş",
+  "author": "Ozgur Gunes",
   "authorEmail": "o.gunes@gmail.com",
-  "homepage": "https://github.com/ozgurgunes/Sketch-Layer-Comps",
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
   "appcast": "https://raw.githubusercontent.com/ozgurgunes/Sketch-Layer-Comps/master/.appcast.xml",
-  "compatibleVersion": 49,
-  "bundleVersion": 1,
+  "homepage": "https://github.com/ozgurgunes/Sketch-Layer-Comps",
   "icon": "icon.png",
   "commands": [
     {

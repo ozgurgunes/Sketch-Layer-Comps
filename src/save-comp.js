@@ -2,15 +2,12 @@ import sketch from 'sketch/dom'
 import settings from 'sketch/settings'
 import analytics from './analytics'
 import * as UI from './ui'
-import {
-  getArtboard,
-  getComps
-} from './utils'
+import { getArtboard, getComps } from './utils'
 
 var doc = sketch.getSelectedDocument()
 var selection = doc.selectedLayers
 
-const saveComp = context => {
+function saveComp(context) {
   try {
     let artboard = getArtboard(selection)
     let comps = getComps(artboard)
@@ -30,8 +27,11 @@ const saveComp = context => {
           name: compName,
           layers: getArtboardLayers(artboard)
         })
-        settings.setLayerSettingForKey(artboard,
-          context.plugin.identifier(), comps)
+        settings.setLayerSettingForKey(
+          artboard,
+          context.plugin.identifier(),
+          comps
+        )
         analytics('Save', true)
         return UI.success(compName + ' saved.')
       }
@@ -44,8 +44,9 @@ const saveComp = context => {
 
 export default saveComp
 
-const getArtboardLayers = artboard => {
-  let comp; let layers = []
+function getArtboardLayers(artboard) {
+  let comp
+  let layers = []
   artboard.layers.map(layer => {
     comp = {
       id: layer.id,
@@ -59,7 +60,7 @@ const getArtboardLayers = artboard => {
   return layers
 }
 
-const saveCompDialog = items => {
+function saveCompDialog(items) {
   let buttons = ['Save', 'Cancel']
   let info = 'Please give a name to layer comp.'
   let accessory = UI.comboBox(items)
@@ -73,7 +74,7 @@ const saveCompDialog = items => {
   }
 }
 
-const updateCompDialog = compName => {
+function updateCompDialog(compName) {
   let buttons = ['Update', 'Cancel']
   let message = 'Are you sure?'
   let info = 'This will update "' + compName + '" comp.'

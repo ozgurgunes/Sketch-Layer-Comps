@@ -1,6 +1,6 @@
 import UI from 'sketch/ui'
 
-export const message = (msg, status) => {
+export function message(msg, status) {
   let emoji = ''
   switch (status) {
     case 'error':
@@ -13,10 +13,14 @@ export const message = (msg, status) => {
   UI.message(emoji + context.command.name() + ': ' + msg)
 }
 
-export const error = msg => message(msg, 'error')
-export const success = msg => message(msg, 'success')
+export function error(msg) {
+  return message(msg, 'error')
+}
+export function success(msg) {
+  return message(msg, 'success')
+}
 
-export const dialog = (info, accessory, buttons, message) => {
+export function dialog(info, accessory, buttons, message) {
   buttons = buttons || ['OK']
   message = message || context.command.name()
   var alert = NSAlert.alloc().init()
@@ -35,26 +39,25 @@ export const dialog = (info, accessory, buttons, message) => {
   return alert.runModal()
 }
 
-export const comboBox = items => {
-  let accessory = NSComboBox.alloc()
-    .initWithFrame(NSMakeRect(0, 0, 240, 25))
+export function comboBox(items) {
+  let accessory = NSComboBox.alloc().initWithFrame(NSMakeRect(0, 0, 240, 25))
   accessory.addItemsWithObjectValues(items)
   accessory.setEditable(true)
   accessory.setCompletes(true)
   return accessory
 }
 
-export const popUpButton = items => {
-  let accessory = NSPopUpButton.alloc()
-    .initWithFrame(NSMakeRect(0, 0, 240, 25))
+export function popUpButton(items) {
+  let accessory = NSPopUpButton.alloc().initWithFrame(NSMakeRect(0, 0, 240, 25))
   accessory.addItemsWithTitles(items)
   return accessory
 }
 
-export const scrollView = view => {
+export function scrollView(view) {
   let accessory = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 120))
-  let scrollView = NSScrollView.alloc()
-    .initWithFrame(NSMakeRect(0, 0, 300, 120))
+  let scrollView = NSScrollView.alloc().initWithFrame(
+    NSMakeRect(0, 0, 300, 120)
+  )
   scrollView.setHasVerticalScroller(true)
   scrollView.setHasHorizontalScroller(false)
   scrollView.setDocumentView(view)
@@ -62,13 +65,15 @@ export const scrollView = view => {
   return accessory
 }
 
-export const optionList = items => {
-  let listView = NSView.alloc()
-    .initWithFrame(NSMakeRect(0, 0, 300, items.length * 24 + 10))
+export function optionList(items) {
+  let listView = NSView.alloc().initWithFrame(
+    NSMakeRect(0, 0, 300, items.length * 24 + 10)
+  )
   let options = []
   items.map((item, i) => {
-    options[i] = NSButton.alloc()
-      .initWithFrame(NSMakeRect(5, 5 + i * 24, 290, 20))
+    options[i] = NSButton.alloc().initWithFrame(
+      NSMakeRect(5, 5 + i * 24, 290, 20)
+    )
     options[i].setButtonType(NSSwitchButton)
     options[i].setTitle(item)
     options[i].setState(false)
@@ -90,14 +95,16 @@ export const optionList = items => {
   }
 }
 
-export const errorList = items => {
-  let listView = NSView.alloc()
-    .initWithFrame(NSMakeRect(0, 0, 300, items.length * 24 + 10))
+export function errorList(items) {
+  let listView = NSView.alloc().initWithFrame(
+    NSMakeRect(0, 0, 300, items.length * 24 + 10)
+  )
   let font = NSFont.systemFontOfSize(NSFont.smallSystemFontSize())
   let errors = []
   items.map((item, i) => {
-    errors[i] = NSTextView.alloc()
-      .initWithFrame(NSMakeRect(5, 10 + i * 24, 290, 20))
+    errors[i] = NSTextView.alloc().initWithFrame(
+      NSMakeRect(5, 10 + i * 24, 290, 20)
+    )
     errors[i].insertText(item)
     errors[i].setFont(font)
     errors[i].setEditable(false)

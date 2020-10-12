@@ -1,23 +1,20 @@
 {
-    "env": {
-        "es6": true,
-        "node": true
-    },
-    "extends": [
-      "eslint:recommended", 
-      "prettier", 
-      "standard", 
-      "sketch"],
-    "plugins": ["prettier"],
-    "globals": {
-        "context": false,
-        "NSSwitchButton": false
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "rules": {
-      "no-console": "off"
-    }
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "prettier", "sketch"],
+  "plugins": ["prettier"],
+  "globals": {
+    "context": "readonly",
+    "NSURLSession": "readonly",
+    "NSSwitchButton": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "off"
+  }
 }

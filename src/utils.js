@@ -3,15 +3,15 @@ import settings from 'sketch/settings'
 import analytics from './analytics'
 import * as UI from './ui'
 
-export const getArtboard = selection => {
+export function getArtboard(selection) {
   let artboard
   switch (true) {
-    case (selection.length == 1 &&
-      selection.layers[0].type == sketch.Types.Artboard):
+    case selection.length == 1 &&
+      selection.layers[0].type == sketch.Types.Artboard:
       artboard = selection.layers[0]
       break
-    case (selection.length == 1 &&
-      selection.layers[0].getParentArtboard() != undefined):
+    case selection.length == 1 &&
+      selection.layers[0].getParentArtboard() != undefined:
       artboard = selection.layers[0].getParentArtboard()
       break
     default:
@@ -21,9 +21,9 @@ export const getArtboard = selection => {
   return artboard
 }
 
-export const getComps = (artboard, error) => {
-  let comps = settings
-    .layerSettingForKey(artboard, context.plugin.identifier()) || []
+export function getComps(artboard, error) {
+  let comps =
+    settings.layerSettingForKey(artboard, context.plugin.identifier()) || []
   if (error && comps.length < 1) {
     analytics('No Comps')
     throw UI.dialog('There are not any layer comps.')
