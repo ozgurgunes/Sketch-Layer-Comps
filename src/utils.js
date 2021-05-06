@@ -1,7 +1,10 @@
 import sketch from 'sketch/dom'
 import settings from 'sketch/settings'
-import analytics from './analytics'
-import * as UI from './ui'
+import analytics from '@ozgurgunes/sketch-plugin-analytics'
+import {
+  errorMessage,
+  alert
+} from '@ozgurgunes/sketch-plugin-ui'
 
 export function getArtboard(selection) {
   let artboard
@@ -16,7 +19,7 @@ export function getArtboard(selection) {
       break
     default:
       analytics('Selection Error')
-      throw UI.error('Please select an artboard.')
+      return errorMessage('Please select an artboard.')
   }
   return artboard
 }
@@ -26,7 +29,7 @@ export function getComps(artboard, error) {
     settings.layerSettingForKey(artboard, context.plugin.identifier()) || []
   if (error && comps.length < 1) {
     analytics('No Comps')
-    throw UI.dialog('There are not any layer comps.')
+    return alert('There are not any layer comps.').runModal()
   }
   return comps.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase())
 }
