@@ -1,4 +1,7 @@
-<img src="https://github.com/ozgurgunes/Sketch-Layer-Comps/blob/master/assets/icon.png?raw=true" alt="Sketch Case Converter" width="192" align="right" />
+> [!WARNING]
+> **Unmaintained Project:** This project is no longer actively maintained or supported. 
+> All issues, pull requests, and feature requests will be ignored. 
+> Feel free to fork the repository, but use it at your own risk.
 
 # Layer Comps  [![Download Latest][image]][link]
 
